@@ -48,15 +48,32 @@ console.log(feature.canAccess());
 // hours exceed 40 using if-else logic.
 
 function TimeLog(freelancerName, projectDetails, logs){
-    this.freelancerName = freelancerName
-    this.projectDetails = projectDetails
-    this.logs = logs
+    this.freelancerName = freelancerName;
+    this.projectDetails = projectDetails;
+    this.logs = logs;
 }
        
 TimeLog.prototype.calculateTotalEarning = function(){
-    return this.ear
+    return this.logs.reduce((sum, log)=>sum + (
+        log.hoursWorked*this.projectDetails.hourslyRate),0);
+};
+TimeLog.prototype.logsByDate= function(startDate, endDate){
+    return this.logs.filter(log => this.logs.date>=startDate && log.date<= endDate);
+};
 
-    }
+TimeLog.prototype.exceedWeekLimit= function (){
+    const weeklyHours =this.logs.reduce((sum, log)=> sum + log.hoursWorked, 0)
+    return weeklyHours >40;
+};
+
+const logs = [{date: "2025-03-03", hoursWorked:8},
+            {date: "2025-05-03", hoursWorked:10},
+            {date: "2025-07-03", hoursWorked:30}
+];
+const timeLog = new TimeLog("Faith", {name: "Website", hourslyRate:20},logs)
+console.log("Earnings:", timeLog.calculateTotalEarning())
+console.log("Overtime:",timeLog.exceedWeekLimit())
+
 
 
 
@@ -66,3 +83,42 @@ TimeLog.prototype.calculateTotalEarning = function(){
 // unitPrice), and status (string), then implement prototype methods 
 // to compute total cost, update order status based on payment, and 
 // categorize order urgency using switch and conditional statements.
+function Order(customer,items,status){
+    this.customer = customer,
+    this.items = items,
+    this.status = status
+}
+Order.prototype.totalCost = function(){
+    return this.items.reduce((total, item)=> total + (item.unitPrice * this.quantity),0)
+}
+Order.prototype.updateOrderStatus = function(paymentRecieved){
+    this.status = paymentRecieved ? "Paid" : "Pending"; 
+
+};
+Order.prototype.urgency = function(){
+    switch(this.status){
+        case "Pending":
+            return "High"
+        case "Paid":
+            return "Low"
+        default:
+            return "Unknown"
+    };
+};
+const John = new Order({name: "John",email: "john@gmail.com"},
+                        [{productName:"Soap",quantity: 5,unitPrice: 75.50},
+                            {productName:"Tissue",quantity: 12,unitPrice: 40.00},
+                            {productName:"Wipes",quantity: 2,unitPrice: 150.00}],"Pending")
+
+console.log(John.totalCost())
+console.log(John.urgency())
+console.log(John.updateOrderStatus("Pending"))
+
+// Build a simple e-learning system where a Course class has properties: 
+// title (string), instructor (object with name and expertise), and students 
+// (array of objects with name and completionStatus), then add prototype 
+// methods to return names of students who completed the course, count 
+// enrolled students by expertise area, and use control flow to output 
+// different messages for instructors with more or less than 5 students.
+
+
